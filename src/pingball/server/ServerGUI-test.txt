@@ -1,0 +1,50 @@
+Manual testing for Pingball Server GUI (Extra feature)
+===========================
+
+Manual Testing Strategy 
+
+ - Connecting Boards 
+     - Vertical connection 
+ 			- With different boards
+ 				- Relevant boards should be highlighted in both tables and 'vertical' radio button pressed in serverGUI..
+ 					- No previous connection: resulting in appearance of connection in client window 
+ 					- Previous connection: resulting in overwriting previous connection in client window 
+ 			- With same board  
+ 				- Relevant board should be highlighted in both tables and 'vertical' radio button pressed in serverGUI..
+ 					- No previous connection: resulting in appearance of connection in client window 
+ 					- Previous connection: resulting in overwriting previous connection in client window 
+ 		- Horizontal connection 
+ 			- With different boards
+ 				- Relevant boards should be highlighted in both tables and 'horizontal' radio button pressed in serverGUI..
+ 					- No previous connection: resulting in appearance of connection in client window 
+ 					- Previous connection: resulting in overwriting previous connection in client window   
+ 			- With same board  
+ 				- Relevant board should be highlighted in both tables and 'horizontal' radio button pressed in serverGUI..
+ 					- No previous connection: resulting in appearance of connection in client window 
+ 					- Previous connection: resulting in overwriting previous connection in client window  
+ 
+ ==============================
+
+1) Start ServerGUI. Default opening behavior is the opening of the GUI window, with empty board lists and no radio button selected.
+   A server should be started at the default port. 
+        
+2) Connect boards to the server and update boardlists. 
+    a)  Connect the board corresponding to file 'boards/default.pb' to the server at default port. The Default 
+    	name should now be present in both lists of boards.  
+    b)  Connect the board corresponding to file 'boards/flippers.pb' to the server at default port. The Flippers
+    	name should now be present in both lists of boards, after Default. 
+        
+3) Connect board walls for the first time. 
+    a)  Select 'horizontal' for connection, Default for Board 1 and Flippers for Board 2, and click connect. 
+    	The connections should now be present in the client windows. 
+    b)  Select 'vertical' for connection, Default for Board 1 and Flippers for Board 2, and click connect. 
+    	The connections should now be present in the client windows.  
+    
+4) Overwrite existing wall connections. 
+    a)  Select 'horizontal' for connection, Default for Board 1 and Default for Board 2, and click connect. 
+    	The original horizontal connection between Default and Flippers should disappear, and both of Default's
+    	side walls should be connected to each other. 
+    b)  Select 'vertical' for connection, Flippers for Board 1 and Flippers for Board 2, and click connect. 
+    	The original vertical connection between Default and Flippers should disappear, and Flippers'
+    	top and bottom walls should be connected to each other. 
+ 

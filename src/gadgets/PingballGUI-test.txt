@@ -1,0 +1,121 @@
+Manual testing for Pingball GUI
+============================
+
+Manual Testing Strategy:
+
+- Load files from boards
+    Default board file loading
+    Loading any number of arbitrary boards
+    Loading the same boards on different clients (all single-machine)
+    Loading different boards on different clients
+    
+- Detect proper keyboard inputs/reactions
+    Testing a large number of different input options
+    Testing a large number of different gadgets to trigger
+    Testing overlaps in key bindings
+       
+- Test behavior of all gadgets
+    Testing drawing graphics of Flipper, Absorber, all Bumpers, Portals
+    Testing proper behavior of triggered Flippers/Absorbers/Bumpers/Portals
+    
+- Pause/Resume/Exit Behavior
+    Testing P/R/E on single machine play
+    Testing P/R/E on server play, and resulting connections loss
+    
+- Connect/Disconnect Behavior
+    Testing general single machine play (with portals)
+    Testing connecting two or more games together 
+        Vertically / Horizontally
+        Different boards / same board
+    Disconnecting games, resolve back to single machine play
+    
+- Optional Client Command Line Arguments
+    Testing optional file, host, port
+    Testing single-machine play/server play
+
+==============================
+
+All tests require running Pingball.java and/or PingballServer.java found in the gadgets folder 
+(the current folder). What follow are exhaustive informations to thoroughly test the system. 
+
+1) Load files from boards
+    a) Run Pingball.java
+        i)  Default opening behavior is the opening of a blank board. Nothing will happen. 
+    b)  Load the next three boards, boards/ballAndPortalOnlyA.pb, boards/ballAndPortalOnlyB.pb, 
+        and boards/ballAndTwoPortals.pb. The boards will be as follows (in order):
+        i)  A ball bouncing up and down along the right wall with a portal about 1/4 of way the down
+        ii) A ball bouncing up and down along the right wall with a portal about 3/4 of the way down
+        iii) A ball bouncing (this time with gravity), with two portals
+    c)  Open three more clients, all of which will be running the blank board.
+    d)  With the three clients, open boards/flippers.pb on each of clients, and each board should
+        appear in each the respective client, each operating independently of each other. 
+        
+2) Detect proper keyboard inputs/reactions
+    [REMINDER: Focus needs to be on the Board JPanel, or keystrokes won't be registered. To do this, simply
+    click on the game area, and focus should shift to the board (and there won't be any focus rectangle around
+    any of the buttons). Please this in mind when testing keyboard inputs]
+    a)  Run Pingball.java and have flippers.pb running. As of now, the default behavior is the following:
+        i) "space" will activate the absorber to launch any stored ball up; because the absorber is 
+        self-triggering, it may not appear to have any tangible effect, but two balls can enter the absorber
+        at once, leaving one ball in there, and then the space will launch the ball up        
+        ii) "z" will activate all but bottom right flipper on key release, and will activate that last flipper
+        on key press
+        iii) "/" will activate the bottom right flipper on key release. 
+        These can all be verified. 
+    b)  The above configuration can be tested, and will verify that both key ups and key downs work, that
+        a single key can be mapped to multiple devices, that keyups and keydowns can be combined on a single
+        key, and that multiple keys can activate the same gadget. 
+    c)  To enable further key ups and key downs, one can uncomment the last few lines in the boards/flipper.pb
+        file and use many more commands to trigger the flippers. These tests will show the exhaustive 
+        capabilities of the keyboard input parsing, as well as further showing that multiple gadgets can
+        activate the same gadget, and that the same line repeated again will cause no conflict. Please
+        recomment the lines again for consistency. 
+        
+3) Test behavior of all gadgets
+    a)  These are quick tests. Open flippers.pb and default.pb to verify that all physics of all non-portal
+        gadgets are functional. Flippers should animate smoothly throughout their movement, and balls should
+        all fall and bounce naturally, with no noticeable lag. For single-machine behavior of portals, open 
+        any of the aforementioned portal tests (boards/ballAndPortalOnlyA.pb, boards/ballAndPortalOnlyB.pb, 
+        and boards/ballAndTwoPortals.pb), and notice that the portals do nothing, and balls pass through 
+        normally.
+    b)  To test portals, we need to open server play. We'll test this in the server section simultaneously. 
+    
+4) Pause/Resume/Exit Behavior
+    a)  Open flippers.pb and pause/resume at your leisure. THe game will automatically start on loading and for
+        rapid pause/resume, keep focus on the pause/resume button (the pause and resume button are the same),
+        and press spacebar. Exit will close the client. 
+    b)  Initially, try connecting to "localhost" and port "10987". Nothing should happen. Now, run 
+        PingballServer.java in the pingball.server folder, and a server will be listening on port 10987. 
+        First, open the Pingball GUI and try pressing connect without both textfields filled in. 
+        Nothing should happen. Next, open the Pingball GUI and in the host and port, enter "localhost" and 
+        "10987". It will say connected to localhost::10987 on the GUI. 
+    c)  Open src/parser/portalsEarth.pb and src/parser/portalsMoon.pb. Note that the order of connecting to server, 
+        then loading the board, or loading the board and then connecting to server will not change anything. 
+        Upon loading the two, it will two boards that share a portal, and the ball bounce between the two.
+    d)  Pausing one board while the ball is in the other will result in the ball appearing out of its board when one
+        clicks resume, as expected. Pausing and resuming work otherwise in each board that the ball is in. 
+    e)  Exiting a board that that ball doesn't contain removes the portal functionality, and it will return to doing
+        nothing. Disconnecting will do the same, but keep both boards persistent. 
+    f)  Close everything. Open the server again (defaults to 10987), and connect a boards to the server, 
+        running flippers.pb. In the server console, typing h Flippers Flippers will connect the board horizontally. 
+        Also typing v Flippers Flippers will connect the board vertically. Restarting the board will restart 
+        the connection (i.e. destroy any previous wall connections). Exiting will cause the board to disconnect,
+        and close, and disconnect will lose all server connections. 
+    g)  Open a server, connect them to the server and load two clients with flippers.pb and default.pb. Connect them
+        horizontally in a ring, and all the balls should fly through. Keyboard inputs will work if focus 
+        is on the flippers board. Disconnecting will subsequently cut connections, but both boards will persist. 
+    
+5) Optional Client Command Line Arguments
+    a)  Start a server, and have the command-line arguments be "--host localhost --port 10987 --file 
+        boards/flippers.pb"; it will load a board connected to the localhost. 
+    b)  If the command-line arguments are "--file boards/flippers.pb", it will load a client with the flippers
+        board. 
+        
+
+        
+        
+        
+        
+        
+    
+            

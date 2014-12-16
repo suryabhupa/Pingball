@@ -1,0 +1,1 @@
+board name=testBoard gravity=20 friction1=0.1 friction2=0.2
